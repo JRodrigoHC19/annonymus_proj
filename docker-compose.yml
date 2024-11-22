@@ -1,0 +1,37 @@
+services:
+  api-auth:
+    container_name: api-auth
+    build:
+      context: ./api-auth
+    restart: always
+    ports:
+      - 3000:3000
+    networks:
+      - backend-auth
+    depends_on:
+      - db-psql
+
+
+  db-psql:
+    image: postgres:15-alpine
+    environment:
+      - POSTGRES_PASSWORD=c0tras3naS3gur@
+      - POSTGRES_DB=tecsup
+    networks:
+      - backend-auth
+    ports:
+      - 5432:5432
+
+  frontend:
+    build:
+      context: ./Kanban
+    restart: always
+    ports:
+      - 8000:8000
+    networks:
+      - backend-auth
+    depends_on:
+      - api-auth
+
+networks:
+  backend-auth:

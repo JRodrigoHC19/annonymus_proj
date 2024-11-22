@@ -1,0 +1,87 @@
+<div *ngIf="project" class="project-details px-4 py-6 md:px-8 lg:px-12">
+    <div class="details-container grid grid-cols-1 md:grid-cols-2 gap-6">
+      <!-- Datos Generales -->
+      <div
+        class="card details-card bg-white rounded-lg shadow-md p-6 hover:shadow-lg transition-transform transform hover:scale-105"
+      >
+        <div class="flex items-center gap-3 mb-4">
+          <i class="fas fa-info-circle text-blue-500 text-2xl"></i>
+          <h2 class="text-xl font-bold text-gray-800">Datos Generales</h2>
+        </div>
+        <div class="details-content text-gray-600 space-y-2">
+          <p><strong>Descripción:</strong> {{ project.description }}</p>
+          <p><strong>Fecha Inicio:</strong> {{ project.startDate }}</p>
+          <p><strong>Fecha Fin:</strong> {{ project.endDate }}</p>
+          <p><strong>Estado:</strong> <span [ngClass]="{'text-green-500': project.status === 'Activo', 'text-red-500': project.status === 'Inactivo'}">{{ project.status }}</span></p>
+          <p><strong>Usuario Creación:</strong> {{ project.createdBy }}</p>
+        </div>
+      </div>
+  
+      <!-- Etapas -->
+      <div
+        class="card stages-card bg-white rounded-lg shadow-md p-6 hover:shadow-lg transition-transform transform hover:scale-105"
+      >
+        <div class="flex items-center gap-3 mb-4">
+          <i class="fas fa-tasks text-green-500 text-2xl"></i>
+          <h2 class="text-xl font-bold text-gray-800">Etapas</h2>
+        </div>
+        <ul class="text-gray-600 space-y-2">
+          <li
+            *ngFor="let etapa of project.stages"
+            class="flex items-center gap-3"
+          >
+            <i class="fas fa-calendar-alt text-gray-500"></i>
+            <span>
+              <strong>{{ etapa.name }}</strong> ({{ etapa.startDate }} - {{ etapa.endDate }}) - {{ etapa.tasks }} tareas
+            </span>
+          </li>
+        </ul>
+      </div>
+    </div>
+  
+    <div class="statistics-container grid grid-cols-1 md:grid-cols-2 gap-6 mt-6">
+      <!-- Estadísticas -->
+      <div
+        class="card statistics-card bg-white rounded-lg shadow-md p-6 hover:shadow-lg transition-transform transform hover:scale-105"
+      >
+        <div class="flex items-center gap-3 mb-4">
+          <i class="fas fa-chart-line text-orange-500 text-2xl"></i>
+          <h2 class="text-xl font-bold text-gray-800">Estadísticas</h2>
+        </div>
+        <div class="statistics-content grid grid-cols-3 gap-4 text-center text-gray-600">
+          <div class="p-4 bg-blue-50 rounded-lg shadow-sm hover:bg-blue-100">
+            <h3 class="font-bold text-lg text-blue-700">Avance</h3>
+            <p class="text-blue-700 font-semibold">{{ project.progress }}%</p>
+          </div>
+          <div class="p-4 bg-green-50 rounded-lg shadow-sm hover:bg-green-100">
+            <h3 class="font-bold text-lg text-green-700">Entregables</h3>
+            <p class="text-green-700 font-semibold">{{ project.deliverables }}%</p>
+          </div>
+          <div class="p-4 bg-yellow-50 rounded-lg shadow-sm hover:bg-yellow-100">
+            <h3 class="font-bold text-lg text-yellow-700">Tareas</h3>
+            <p class="text-yellow-700 font-semibold">{{ project.tasks }}%</p>
+          </div>
+        </div>
+      </div>
+  
+      <!-- Usuarios -->
+      <div
+        class="card users-card bg-white rounded-lg shadow-md p-6 hover:shadow-lg transition-transform transform hover:scale-105"
+      >
+        <div class="flex items-center gap-3 mb-4">
+          <i class="fas fa-users text-purple-500 text-2xl"></i>
+          <h2 class="text-xl font-bold text-gray-800">Usuarios</h2>
+        </div>
+        <ul class="text-gray-600 space-y-2">
+          <li
+            *ngFor="let usuario of project.users"
+            class="flex items-center gap-3"
+          >
+            <i class="fas fa-user-circle text-gray-500"></i>
+            <span><strong>{{ usuario.name }}</strong> ({{ usuario.role }})</span>
+          </li>
+        </ul>
+      </div>
+    </div>
+  </div>
+  

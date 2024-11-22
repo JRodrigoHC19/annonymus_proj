@@ -1,0 +1,171 @@
+<div class="bg-gray-100 p-4 rounded-lg shadow mb-6">
+  <!-- Título centrado -->
+  <div class="flex justify-center mb-4">
+    <h1 class="text-2xl md:text-3xl font-bold text-gray-800 flex items-center">
+      <svg class="w-8 h-8 text-blue-500 mr-2" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16 12a4 4 0 11-8 0 4 4 0 018 0zM12 14v7m0 0h-3m3 0h3" />
+      </svg>
+      Usuarios
+    </h1>
+  </div>
+
+  <!-- Campo de búsqueda y botones -->
+  <div class="flex flex-col md:flex-row justify-between items-center">
+    <!-- Campo de búsqueda -->
+    <input
+      type="text"
+      placeholder="Buscar por nombre"
+      [(ngModel)]="searchTerm"
+      (input)="buscarUsuarios()"
+      class="w-full md:w-1/3 p-2 rounded border border-gray-300 focus:outline-none focus:ring focus:ring-blue-500 mb-4 md:mb-0"
+    />
+
+    <!-- Botones -->
+    <div class="flex gap-2">
+      <button
+        class="bg-blue-500 text-white py-2 px-4 rounded hover:bg-blue-600 transition-transform transform hover:scale-105"
+        (click)="openCreateUserModal()"
+      >
+        + Crear
+      </button>
+      <button
+        class="bg-green-500 text-white py-2 px-4 rounded hover:bg-green-600 transition-transform transform hover:scale-105"
+        (click)="exportarUsuarios()"
+      >
+        Exportar Usuarios
+      </button>
+    </div>
+  </div>
+</div>
+
+<!-- Tabla de usuarios filtrada -->
+<div class="overflow-x-auto">
+  <table class="w-full text-left bg-white rounded-lg shadow-lg overflow-hidden" *ngIf="filteredUsuarios.length > 0; else noResults">
+    <thead class="bg-blue-500 text-white">
+      <tr>
+        <th class="px-4 py-2">Nombre</th>
+        <th class="px-4 py-2">Correo</th>
+        <th class="px-4 py-2">Contraseña</th>
+        <th class="px-4 py-2">Carrera</th>
+        <th class="px-4 py-2">Ciclo</th>
+        <th class="px-4 py-2">Sección</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr
+        *ngFor="let usuario of filteredUsuarios"
+        class="border-t hover:bg-gray-100 transition-colors"
+      >
+        <td class="px-4 py-2">{{ usuario.nombre }}</td>
+        <td class="px-4 py-2">{{ usuario.correo }}</td>
+        <td class="px-4 py-2">{{ usuario.contrasena }}</td>
+        <td class="px-4 py-2">{{ usuario.carrera }}</td>
+        <td class="px-4 py-2">{{ usuario.ciclo }}</td>
+        <td class="px-4 py-2">{{ usuario.seccion }}</td>
+      </tr>
+    </tbody>
+  </table>
+
+  <!-- Mensaje cuando no hay resultados -->
+  <ng-template #noResults>
+    <p class="text-center text-gray-500 mt-4">No se encontraron coincidencias.</p>
+  </ng-template>
+</div>
+
+<!-- Modal Crear Usuario -->
+<div
+  *ngIf="showCreateUserModal"
+  class="fixed inset-0 bg-black bg-opacity-50 flex justify-center items-center z-50"
+>
+  <div class="bg-white rounded-lg p-6 shadow-lg w-full max-w-lg animate-fade-in">
+    <div class="flex justify-between items-center border-b pb-4">
+      <h3 class="text-lg font-bold">Crear Usuario</h3>
+      <button class="text-red-500 hover:text-red-600" (click)="closeCreateUserModal()">&times;</button>
+    </div>
+    <form (ngSubmit)="registerUser()" class="space-y-4 mt-4">
+      <div>
+        <label for="nombre" class="block font-medium text-gray-600">Nombres y Apellidos</label>
+        <input
+          type="text"
+          id="nombre"
+          [(ngModel)]="newUser.nombre"
+          name="nombre"
+          class="w-full p-2 rounded border border-gray-300 focus:outline-none focus:ring focus:ring-blue-500"
+          required
+        />
+      </div>
+      <div>
+        <label for="correo" class="block font-medium text-gray-600">Correo</label>
+        <input
+          type="email"
+          id="correo"
+          [(ngModel)]="newUser.correo"
+          name="correo"
+          class="w-full p-2 rounded border border-gray-300 focus:outline-none focus:ring focus:ring-blue-500"
+          required
+        />
+      </div>
+      <div>
+        <label for="contrasena" class="block font-medium text-gray-600">Contraseña</label>
+        <input
+          type="password"
+          id="contrasena"
+          [(ngModel)]="newUser.contrasena"
+          name="contrasena"
+          class="w-full p-2 rounded border border-gray-300 focus:outline-none focus:ring focus:ring-blue-500"
+          required
+        />
+      </div>
+      <div>
+        <label for="carrera" class="block font-medium text-gray-600">Carrera</label>
+        <input
+          type="text"
+          id="carrera"
+          [(ngModel)]="newUser.carrera"
+          name="carrera"
+          class="w-full p-2 rounded border border-gray-300 focus:outline-none focus:ring focus:ring-blue-500"
+          required
+        />
+      </div>
+      <div class="flex gap-4">
+        <div class="w-1/2">
+          <label for="ciclo" class="block font-medium text-gray-600">Ciclo</label>
+          <input
+            type="text"
+            id="ciclo"
+            [(ngModel)]="newUser.ciclo"
+            name="ciclo"
+            class="w-full p-2 rounded border border-gray-300 focus:outline-none focus:ring focus:ring-blue-500"
+            required
+          />
+        </div>
+        <div class="w-1/2">
+          <label for="seccion" class="block font-medium text-gray-600">Sección</label>
+          <input
+            type="text"
+            id="seccion"
+            [(ngModel)]="newUser.seccion"
+            name="seccion"
+            class="w-full p-2 rounded border border-gray-300 focus:outline-none focus:ring focus:ring-blue-500"
+            required
+          />
+        </div>
+      </div>
+      <div class="flex justify-end gap-4">
+        <button
+          type="button"
+          class="bg-gray-400 text-white py-2 px-4 rounded hover:bg-gray-500 transition-transform transform hover:scale-105"
+          (click)="closeCreateUserModal()"
+        >
+          Cancelar
+        </button>
+        <button
+          type="submit"
+          class="bg-blue-500 text-white py-2 px-4 rounded hover:bg-blue-600 transition-transform transform hover:scale-105"
+        >
+          Guardar
+        </button>
+      </div>
+    </form>
+  </div>
+</div>

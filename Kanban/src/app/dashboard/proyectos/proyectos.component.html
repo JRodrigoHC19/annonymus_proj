@@ -1,0 +1,195 @@
+<div class="proyectos-container px-4 md:px-6 py-6 bg-gray-50 min-h-screen max-w-screen-xl mx-auto">
+    <!-- Títulos -->
+    <h1 class="text-2xl md:text-3xl font-bold text-center text-gray-800 mb-4">🚀 Proyectos</h1>
+    <p class="text-sm md:text-lg text-center text-gray-600 mb-6">
+      Gestiona los proyectos y revisa información sobre ellos
+    </p>
+  
+    <!-- Barra de búsqueda y filtros -->
+    <div class="search-filters flex flex-col md:flex-row justify-center items-center gap-4 mb-6">
+      <div class="relative w-full md:w-1/3">
+        <input
+          type="text"
+          placeholder="🔍 Buscar proyectos"
+          class="search-bar px-4 py-2 w-full border border-gray-300 rounded-lg shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500"
+        />
+      </div>
+      <div class="relative w-full md:w-1/4">
+        <select
+          class="dropdown px-4 py-2 w-full border border-gray-300 rounded-lg shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500"
+        >
+          <option value="">Seleccione estado</option>
+          <option value="activo">Activo</option>
+          <option value="inactivo">Inactivo</option>
+        </select>
+      </div>
+      <button
+        class="btn btn-filtrar px-6 py-2 bg-blue-500 text-white rounded-lg shadow-md hover:bg-blue-600 transform hover:scale-105 transition-transform"
+      >
+        Filtrar
+      </button>
+    </div>
+  
+    <!-- Botón de asignar tareas (solo visible para docentes) -->
+    <div
+      *ngIf="userRole === 2"
+      class="docente-actions flex flex-col md:flex-row items-center gap-4 mb-6"
+    >
+      <button
+        class="btn btn-asignar-tareas px-6 py-2 bg-green-500 text-white rounded-lg shadow-md hover:bg-green-600 transform hover:scale-105 transition-transform flex items-center gap-2"
+        (click)="toggleAssignTaskForm()"
+      >
+        <svg
+          class="w-5 h-5"
+          xmlns="http://www.w3.org/2000/svg"
+          fill="none"
+          viewBox="0 0 24 24"
+          stroke="currentColor"
+        >
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4" />
+        </svg>
+        Asignar Tareas
+      </button>
+      <div>
+        <input
+          type="file"
+          class="input-file border border-gray-300 rounded-lg shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500 file:mr-4 file:py-2 file:px-4 file:rounded-full file:border-0 file:text-sm file:font-semibold file:bg-blue-50 file:text-blue-700 hover:file:bg-blue-100"
+          (change)="loadExcel($event)"
+          accept=".xlsx"
+        />
+      </div>
+    </div>
+  
+    <!-- Formulario emergente para asignar tareas -->
+    <div
+      *ngIf="showAssignTaskForm"
+      class="assign-task-form fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50"
+    >
+      <div class="bg-white p-6 rounded-lg shadow-lg max-w-xl w-full animate-fade-in">
+        <h2 class="form-heading text-2xl font-semibold text-gray-700 mb-4 flex items-center gap-2">
+          <svg
+            class="w-6 h-6 text-blue-500"
+            xmlns="http://www.w3.org/2000/svg"
+            fill="none"
+            viewBox="0 0 24 24"
+            stroke="currentColor"
+          >
+            <path
+              stroke-linecap="round"
+              stroke-linejoin="round"
+              stroke-width="2"
+              d="M12 4v16m8-8H4"
+            />
+          </svg>
+          Asignar Tareas
+        </h2>
+        <form class="assign-form space-y-4">
+          <!-- Proyecto -->
+          <div>
+            <label for="proyecto" class="block text-gray-700 font-medium">Proyecto</label>
+            <select
+              id="proyecto"
+              [(ngModel)]="selectedProject"
+              name="project"
+              class="form-input w-full px-4 py-2 border border-gray-300 rounded-lg shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500"
+            >
+              <option *ngFor="let project of projects" [ngValue]="project">
+                {{ project.title }}
+              </option>
+            </select>
+          </div>
+  
+          <!-- Entregables -->
+          <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+            <div>
+              <label for="entregables" class="block text-gray-700 font-medium">Entregables</label>
+              <input
+                id="entregables"
+                type="text"
+                placeholder="Entregables"
+                class="form-input w-full px-4 py-2 border border-gray-300 rounded-lg shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500"
+              />
+            </div>
+            <div>
+              <label for="tipo" class="block text-gray-700 font-medium">Tipo</label>
+              <input
+                id="tipo"
+                type="text"
+                placeholder="Tipo"
+                class="form-input w-full px-4 py-2 border border-gray-300 rounded-lg shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500"
+              />
+            </div>
+          </div>
+  
+          <!-- Prioridad y Fechas -->
+          <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
+            <div>
+              <label for="prioridad" class="block text-gray-700 font-medium">Prioridad</label>
+              <input
+                id="prioridad"
+                type="text"
+                placeholder="Prioridad"
+                class="form-input w-full px-4 py-2 border border-gray-300 rounded-lg shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500"
+              />
+            </div>
+            <div>
+              <label for="inicio" class="block text-gray-700 font-medium">Inicio</label>
+              <input
+                id="inicio"
+                type="date"
+                class="form-input w-full px-4 py-2 border border-gray-300 rounded-lg shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500"
+              />
+            </div>
+            <div>
+              <label for="fin" class="block text-gray-700 font-medium">Fin</label>
+              <input
+                id="fin"
+                type="date"
+                class="form-input w-full px-4 py-2 border border-gray-300 rounded-lg shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500"
+              />
+            </div>
+          </div>
+  
+          <!-- Botones del formulario -->
+          <div class="form-buttons flex justify-end gap-4 mt-4">
+            <button
+              type="submit"
+              class="btn btn-submit px-6 py-2 bg-blue-500 text-white rounded-lg shadow-md hover:bg-blue-600 transform hover:scale-105 transition-transform"
+            >
+              Guardar
+            </button>
+            <button
+              type="button"
+              class="btn btn-cancel px-6 py-2 bg-gray-500 text-white rounded-lg shadow-md hover:bg-gray-600 transform hover:scale-105 transition-transform"
+              (click)="toggleAssignTaskForm()"
+            >
+              Cancelar
+            </button>
+          </div>
+        </form>
+      </div>
+    </div>
+  
+    <!-- Lista de proyectos -->
+    <div class="projects-list grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
+      <div
+        class="project-card bg-white p-4 md:p-6 rounded-lg shadow-md hover:shadow-lg transition-transform transform hover:-translate-y-1"
+        *ngFor="let project of projects"
+      >
+        <div class="flex justify-between items-center">
+          <h3 class="text-lg md:text-xl font-semibold text-gray-800">{{ project.title }}</h3>
+          <svg
+            class="w-5 h-5 md:w-6 md:h-6 text-blue-500"
+            xmlns="http://www.w3.org/2000/svg"
+            fill="none"
+            viewBox="0 0 24 24"
+            stroke="currentColor"
+          >
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7" />
+          </svg>
+        </div>
+        <p class="text-sm md:text-base text-gray-600 mt-2">{{ project.description }}</p>
+      </div>
+    </div>
+  </div>
+  

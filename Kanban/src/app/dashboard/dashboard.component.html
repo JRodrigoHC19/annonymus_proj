@@ -1,0 +1,118 @@
+<div class="dashboard-container flex flex-col min-h-screen bg-gray-100">
+  <!-- Navbar para móviles -->
+  <div
+    *ngIf="isMobile"
+    class="mobile-navbar fixed top-0 left-0 w-full bg-[#0f1419] text-white flex justify-between items-center px-4 py-3 z-50 shadow-md"
+  >
+    <!-- Botón de Menú (Hamburger) -->
+    <button
+      class="menu-toggle bg-[#0f1419] text-white p-2 rounded-full"
+      (click)="toggleMenu()"
+    >
+      <i class="fas fa-bars text-xl"></i>
+    </button>
+    <!-- Título -->
+    <h1 class="text-lg font-bold text-center flex-grow text-white">KANBAN</h1>
+  </div>
+
+  <!-- Menú Lateral -->
+  <nav
+    class="fixed top-0 left-0 h-full w-64 bg-[#0f1419] text-white transform transition-transform duration-300 ease-in-out z-40"
+    [class.-translate-x-full]="!isMenuOpen && isMobile"
+    [class.translate-x-0]="isMenuOpen || !isMobile"
+  >
+    <!-- Encabezado del menú -->
+    <div
+      class="sidebar-header flex flex-col items-center justify-center py-6 border-b border-gray-700"
+      [class.pt-20]="isMobile"
+    >
+      <img src="/assets/icons/T-CIAN-PNG.png" alt="Logo" class="w-10 h-10 mb-2" />
+      <h2 class="text-xl font-bold">Kanban</h2>
+    </div>
+
+    <!-- Bienvenida en el menú -->
+    <div class="sidebar-welcome flex flex-col items-center text-center py-4 border-b border-gray-700">
+      <h1 class="text-lg font-semibold text-white">Dashboard</h1>
+      <p class="text-sm text-gray-400">Bienvenido, {{ your_role }}</p>
+    </div>
+
+    <!-- Contenido del menú -->
+    <div class="menu-content px-4 md:px-0 py-6 md:py-0">
+      <ul class="menu-top space-y-4">
+        <li>
+          <a
+            routerLink="/dashboard"
+            class="flex items-center px-4 py-2 text-lg rounded-lg hover:bg-gray-700 transition-colors"
+            (click)="handleOptionClick()"
+          >
+            <i class="fas fa-home mr-3"></i>
+            Inicio
+          </a>
+        </li>
+        <li *ngIf="userRole === 1 || userRole === 2">
+          <a
+            routerLink="/dashboard/proyectos"
+            class="flex items-center px-4 py-2 text-lg rounded-lg hover:bg-gray-700 transition-colors"
+            (click)="handleOptionClick()"
+          >
+            <i class="fas fa-project-diagram mr-3"></i>
+            Proyectos
+          </a>
+        </li>
+        <li *ngIf="userRole === 1 || userRole === 3">
+          <a
+            routerLink="/dashboard/usuarios"
+            class="flex items-center px-4 py-2 text-lg rounded-lg hover:bg-gray-700 transition-colors"
+            (click)="handleOptionClick()"
+          >
+            <i class="fas fa-users mr-3"></i>
+            Usuarios
+          </a>
+        </li>
+      </ul>
+      <hr class="my-6 border-gray-600" />
+      <ul class="menu-bottom space-y-4">
+        <li>
+          <a
+            routerLink="/dashboard/perfil"
+            class="flex items-center px-4 py-2 text-lg rounded-lg hover:bg-gray-700 transition-colors"
+            (click)="handleOptionClick()"
+          >
+            <i class="fas fa-user mr-3"></i>
+            Perfil
+          </a>
+        </li>
+        <li *ngIf="userRole === 1 || userRole === 2">
+          <a
+            routerLink="/dashboard/configuracion"
+            class="flex items-center px-4 py-2 text-lg rounded-lg hover:bg-gray-700 transition-colors"
+            (click)="handleOptionClick()"
+          >
+            <i class="fas fa-cog mr-3"></i>
+            Configuración
+          </a>
+        </li>
+        <li>
+          <a
+            routerLink="/dashboard/logout"
+            class="flex items-center px-4 py-2 text-lg rounded-lg hover:bg-gray-700 transition-colors"
+            (click)="handleOptionClick()"
+          >
+            <i class="fas fa-sign-out-alt mr-3"></i>
+            Cerrar sesión
+          </a>
+        </li>
+      </ul>
+    </div>
+  </nav>
+
+  <!-- Contenido Principal -->
+  <div
+    class="main-content flex-grow ml-0 md:ml-64 transition-all duration-300"
+    [class.mt-16]="isMobile"
+  >
+    <section class="dashboard-info p-0 md:p-6">
+      <router-outlet></router-outlet>
+    </section>
+  </div>
+</div>

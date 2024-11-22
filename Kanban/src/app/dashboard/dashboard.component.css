@@ -1,0 +1,20 @@
+/* Sidebar */
+.sidebar {
+  width: 16rem;
+  height: 100%;
+  background-color: #0f1419;
+  color: white;
+  position: fixed;
+  top: 0;
+  left: 0;
+  z-index: 50;
+  transform: translateX(-100%); 
+}
+
+.sidebar.translate-x-0 {
+  transform: translateX(0); 
+}
+
+.menu-toggle {
+  cursor: pointer;
+}
