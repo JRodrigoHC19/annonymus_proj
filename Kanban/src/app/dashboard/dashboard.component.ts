@@ -1,6 +1,7 @@
 import { Component, HostListener, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
+import { environment as env } from 'src/environment/environment';
 
 @Component({
   selector: 'app-dashboard',
@@ -18,7 +19,7 @@ export class DashboardComponent implements OnInit {
 
 
   ngOnInit() {
-    let url = 'http://localhost:3000/api/users/login';
+    let url = env.api_url;
     if (localStorage.getItem('token') == null){
       this.router.navigate(['/login']);
     }

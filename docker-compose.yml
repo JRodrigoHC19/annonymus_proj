@@ -23,9 +23,10 @@ services:
       - 5432:5432
 
   frontend:
-    build:
-      context: ./Kanban
+    image: jaimehuacac/kanban_front:v1
     restart: always
+    volumes:
+      - ./env.ts:/src/app/src/environment/environment.ts
     ports:
       - 8000:8000
     networks:

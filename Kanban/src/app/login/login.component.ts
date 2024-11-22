@@ -4,7 +4,7 @@ import { FormsModule } from '@angular/forms';
 import { CommonModule } from '@angular/common'; 
 import { RouterModule } from '@angular/router';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
-
+import { environment as env } from 'src/environment/environment';
 
 @Component({
   selector: 'app-login',
@@ -20,11 +20,14 @@ import { HttpClient, HttpHeaders } from '@angular/common/http';
 export class LoginComponent {
   username: string = '';
   password: string = '';
-  url: string = 'http://localhost:3000/api/users/login';
+  url: string = env.api_url;
+  
+  
 
   constructor(private router: Router, private http: HttpClient) {}
 
   ngOnInit() {
+    console.log(this.url);
     if (localStorage.getItem('token') !== null) {
       const headers = new HttpHeaders().set('Authorization', `Bearer ${localStorage.getItem('token')}`);
       this.http.get<any>(this.url,{headers: headers}).subscribe({
