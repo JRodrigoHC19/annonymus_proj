@@ -27,7 +27,7 @@ services:
     image: jaimehuacac/kanban_front:v1
     restart: always
     volumes:
-      - ./env.ts:/src/app/src/environment/environment.ts
+      - ./env.ts:/app/src/environment/environment.ts
     ports:
       - 8000:8000
     networks:
