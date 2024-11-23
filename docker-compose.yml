@@ -24,7 +24,7 @@ services:
       - 5432:5432
 
   frontend:
-    image: jaimehuacac/kanban_front:v1
+    image: jaimehuacac/kanban_front:v2
     restart: always
     volumes:
       - ./env.ts:/app/src/environment/environment.ts
