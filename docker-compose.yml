@@ -13,6 +13,7 @@ services:
 
 
   db-psql:
+    container_name: db-psql
     image: postgres:15-alpine
     environment:
       - POSTGRES_PASSWORD=c0tras3naS3gur@
